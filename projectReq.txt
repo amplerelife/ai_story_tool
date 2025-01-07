@@ -1,0 +1,117 @@
+Problem 2: 
+"AI-Driven Personalized Storytelling and Content Creation 
+Platform" 
+Overview 
+This project focuses on building a Generative AI-powered storytelling platform 
+integrated with Automatic Prompt Engineering technology to create 
+personalized and coherent content (e.g., stories, articles, or interactive 
+dialogues). The system automatically adapts its prompts based on user 
+preferences, feedback, and narrative progress to generate high-quality and 
+contextually consistent outputs. 
+Project Goal 
+The goal is to develop a platform where users can: 
+1. Input general preferences (e.g., themes, genres, or key characters). 
+2. Receive automatically generated, coherent, and creative outputs (stories, 
+articles, etc.). 
+3. Leverage automatic prompt engineering to optimize the prompts 
+dynamically based on user feedback and content evaluation. 
+Key Features 
+1. User Preference Interface (10%) 
+o A simple UI/CLI where users provide input preferences: 
+▪ Theme: AI, Climate Change, Sci-fi, Fantasy, Romance, etc. 
+▪ Genre: Short story, interactive dialogue, blog post, etc. 
+▪ Tone: Optimistic, dark, humorous, formal, etc. 
+▪ Key Elements: Characters, locations, or plot points. 
+2. Dynamic Prompt Engineering Module (25%) 
+o Build a pipeline that dynamically generates, optimizes, and fine
+tunes prompts for generative models like GPT (or LLaMA, Falcon, 
+etc.). 
+o Integrate automatic prompt engineering techniques such as: 
+▪ Prompt Rephrasing: Reword and restructure prompts for 
+improved results. 
+▪ Chain-of-Thought: Break complex tasks into smaller, 
+logical sub-prompts. 
+▪ Iterative Refinement: Use generated outputs as feedback 
+to improve prompts in subsequent runs. 
+Example: 
+o Initial Prompt: "Write a sci-fi story about robots and humans." 
+o Re-engineered Prompt: 
+"Generate a short, futuristic sci-fi story set in a world where robots 
+have emotions, and humans struggle to trust them. Include a 
+dramatic event where both groups must work together to survive." 
+3. Generative AI Integration (15%) 
+o Integrate with an open-source language model (e.g., Hugging 
+Face's GPT-based models) or an API like OpenAI GPT-4. 
+o Generate content based on the optimized prompts. 
+4. Automatic Content Evaluation & Feedback Loop (15%) 
+o Implement an automatic evaluation mechanism to assess 
+generated content: 
+▪ Check for coherence, creativity, and relevance using NLP 
+techniques like BLEU scores or similarity metrics. 
+▪ User feedback: Allow users to rate or edit the generated 
+content. 
+o Use evaluation results and user feedback to fine-tune and re
+optimize the prompt in the next iteration. 
+5. Output Visualization and Personalization (10%) 
+o Present the generated story/article dynamically with visual aids: 
+▪ Textual outputs enriched with visuals using tools like 
+DALL·E or Stable Diffusion for image generation based on 
+the same prompts. 
+▪ For example, if the story describes a dragon, generate an 
+accompanying image of the dragon. 
+o Save user sessions to allow continuation of stories or content. 
+Technical Stack 
+• Language Models: OpenAI GPT (API), Hugging Face models (e.g., GPT
+3.5-turbo equivalents). 
+• Automatic Prompt Optimization: Libraries like LangChain or custom
+built pipelines. 
+• Image Generation: DALL·E, Stable Diffusion, or MidJourney alternatives. 
+• Backend: Python (FastAPI or Flask). 
+• Frontend: Streamlit or React (optional, for UI visualization). 
+• Evaluation Tools: 
+o NLP metrics: BLEU, ROUGE, or cosine similarity for textual 
+analysis. 
+o User-based feedback via simple ratings (e.g., thumbs-up/down). 
+• Storage: SQLite, PostgreSQL, or JSON-based session storage. 
+Workflow 
+1. User Input: Users input preferences like themes, genres, tone, and key 
+ideas. 
+2. Automatic Prompt Engineering: The system generates and refines 
+prompts based on user input. 
+3. Content Generation: Send the optimized prompt to the generative AI 
+model and receive content. 
+4. Evaluation: 
+o NLP evaluation metrics analyze content quality. 
+o Users provide feedback to further optimize the prompts. 
+5. Visualization: Display text outputs along with relevant AI-generated 
+images. 
+6. Session Management: Save user inputs and generated content for 
+continuation or editing later. 
+Challenges to Solve 
+1. Dynamic Prompt Optimization: Implement strategies to refine prompts 
+for better results (e.g., iterative refinements). 
+2. Feedback Loop: Integrate automatic evaluation and user feedback to 
+f
+ ine-tune content generation. 
+3. Coherence and Creativity: Ensure the content remains contextually 
+consistent and creative across multiple user interactions. 
+4. Integration with Visual Tools: Dynamically generate images that align 
+with the generated text. 
+Deliverables 
+1. A fully functional AI-powered storytelling platform. 
+2. A backend pipeline for dynamic prompt engineering and generative AI 
+integration. 
+3. User evaluation results (qualitative and quantitative feedback). 
+4. A final report documenting: 
+o Problem statement and approach. 
+o System architecture and components. 
+o Technical implementation details. 
+o Challenges faced and solutions. 
+Learning Outcomes 
+Students will gain hands-on experience in: 
+• Working with generative AI models (text generation and image generation). 
+• Implementing automatic prompt engineering techniques for optimizing 
+AI outputs. 
+• Building feedback loops to improve AI performance. 
+• Integrating NLP evaluation techniques. 
+• Developing a full-stack AI-powered application.
