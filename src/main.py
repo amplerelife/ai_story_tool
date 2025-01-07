@@ -1,17 +1,40 @@
 import os
 import click
+import sqlite3
 from datetime import datetime
-from uuid import uuid4
 from openai import OpenAI
 from dotenv import load_dotenv
-from config import STORY_PROMPT_TEMPLATE, SYSTEM_PROMPT
+from config import (
+    STORY_PROMPT_TEMPLATE, 
+    REGENERATE_PROMPT_TEMPLATE, 
+    SYSTEM_PROMPT, 
+    INIT_DB,
+    DB_PATH
+)
+import json
 
-# 加载环境变量和初始化客户端
+# 加載環境變量和初始化客戶端
 load_dotenv()
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
+def init_db():
+    """初始化資料庫"""
+    #TODO: 初始化資料庫
+    pass
+
+def save_story(version: int, theme: str, genre: str, tone: str, elements: list, 
+               prompt: str, content: str, feedback: str = None, rating: int = None):
+    """保存故事記錄"""
+    #TODO: 保存故事記錄
+    pass
+
+def get_story(version: int) -> dict:
+    """獲取指定版本的故事"""
+    #TODO: 獲取指定版本的故事
+    pass
+
 def generate_story_prompt(preferences: dict) -> str:
-    """根据用户偏好生成提示词"""
+    """生成初始提示詞"""
     return STORY_PROMPT_TEMPLATE.format(
         theme=preferences['theme'],
         genre=preferences['genre'],
@@ -19,8 +42,19 @@ def generate_story_prompt(preferences: dict) -> str:
         elements=', '.join(preferences['key_elements'])
     )
 
+def generate_regenerate_prompt(preferences: dict, original_story: str, feedback: str) -> str:
+    """生成重新生成的提示詞"""
+    return REGENERATE_PROMPT_TEMPLATE.format(
+        original_story=original_story,
+        feedback=feedback,
+        theme=preferences['theme'],
+        genre=preferences['genre'],
+        tone=preferences['tone'],
+        elements=', '.join(preferences['key_elements'])
+    )
+
 def call_openai_api(prompt: str) -> str:
-    """调用OpenAI API生成故事"""
+    """調用OpenAI API"""
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -35,20 +69,11 @@ def call_openai_api(prompt: str) -> str:
     except Exception as e:
         raise Exception(f"調用OpenAI API失敗: {str(e)}")
 
-def load_stories() -> dict:
-    """加載已保存的故事"""
-    #TODO: 從資料庫中加載已保存的故事
-    pass
-
-def save_story(story: dict):
-    """保存故事到資料庫"""
-    #TODO: 保存故事到資料庫
-    pass
-
 @click.group()
 def cli():
     """AI故事生成工具"""
-    pass
+    # 每次啟動時初始化資料庫
+    init_db()
 
 @cli.command()
 def create_story():
@@ -67,55 +92,71 @@ def create_story():
     }
     
     try:
-        # 生成故事
+        # 生成初始故事
+        version = 1
         prompt = generate_story_prompt(preferences)
         content = call_openai_api(prompt)
         
-        # 創建故事數據
-        story = {
-            "id": str(uuid4()),
-            "title": f"{theme}的{genre}",
-            "content": content,
-            "preferences": preferences,
-            "created_at": datetime.now().isoformat(),
-            "feedback_score": None
-        }
+        # 保存第一個版本
+        save_story(
+            version=version,
+            theme=theme,
+            genre=genre,
+            tone=tone,
+            elements=key_elements,
+            prompt=prompt,
+            content=content
+        )
         
-        # 保存故事
-        save_story(story)
-        
-        # 顯示結果
-        click.echo("\n生成的故事：\n")
+        # 顯示故事
+        click.echo(f"\n第 {version} 版故事：\n")
         click.echo(content)
         
+        # 循環獲取反饋並重新生成
+        while click.confirm("\n您想要提供反饋嗎？"):
+            feedback = click.prompt("請輸入您的反饋意見", type=str)
+            rating = click.prompt("請給這個版本評分 (1-5)", type=int, default=3)
+            
+            # 更新當前版本的反饋
+            save_story(
+                version=version,
+                theme=theme,
+                genre=genre,
+                tone=tone,
+                elements=key_elements,
+                prompt=prompt,
+                content=content,
+                feedback=feedback,
+                rating=rating
+            )
+            
+            # 生成新版本
+            version += 1
+            prompt = generate_regenerate_prompt(preferences, content, feedback)
+            content = call_openai_api(prompt)
+            
+            # 保存新版本
+            save_story(
+                version=version,
+                theme=theme,
+                genre=genre,
+                tone=tone,
+                elements=key_elements,
+                prompt=prompt,
+                content=content
+            )
+            
+            # 顯示新版本
+            click.echo(f"\n第 {version} 版故事：\n")
+            click.echo(content)
+            
+            if click.confirm("您滿意這個版本嗎？", default=True):
+                break
+        
+        click.echo("\n感謝使用！")
+        
     except Exception as e:
-        click.echo(f"生成故事時發生錯誤: {str(e)}", err=True)
-
-@cli.command()
-@click.argument('story_id', required=False)
-def view_story(story_id):
-    """查看已生成的故事"""
-    stories = load_stories()
-    
-    if story_id:
-        if story_id in stories:
-            story = stories[story_id]
-            click.echo(f"\n標題：{story['title']}")
-            click.echo(f"創建時間：{story['created_at']}")
-            click.echo("\n內容：\n")
-            click.echo(story['content'])
-        else:
-            click.echo(f"未找到ID為 {story_id} 的故事")
-    else:
-        if stories:
-            click.echo("\n已生成的故事列表：\n")
-            for id, story in stories.items():
-                click.echo(f"ID: {id}")
-                click.echo(f"標題: {story['title']}")
-                click.echo(f"創建時間: {story['created_at']}")
-                click.echo("---")
-        else:
-            click.echo("沒有生成任何故事")
+        click.echo(f"發生錯誤: {str(e)}", err=True)
 
 if __name__ == '__main__':
     cli() 
