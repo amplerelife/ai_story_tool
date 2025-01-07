@@ -1,13 +1,16 @@
 import os
 from pathlib import Path
+import sqlite3
 
-# 基础配置
+# 基礎配置
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / 'data'
 DB_PATH = DATA_DIR / 'stories.db'
 
-# 確保必要的目錄存在
-DATA_DIR.mkdir(exist_ok=True)
+# 打印路径
+print(f"專案根目錄 (BASE_DIR): {str(BASE_DIR)}")
+print(f"資料目錄 (DATA_DIR): {str(DATA_DIR)}")
+print(f"資料庫路徑 (DB_PATH): {str(DB_PATH)}")
 
 # 故事生成提示詞模板
 STORY_PROMPT_TEMPLATE = """

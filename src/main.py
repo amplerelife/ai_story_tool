@@ -9,6 +9,8 @@ from config import (
     REGENERATE_PROMPT_TEMPLATE, 
     SYSTEM_PROMPT, 
     INIT_DB,
+    BASE_DIR,
+    DATA_DIR,
     DB_PATH
 )
 import json
@@ -19,8 +21,12 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def init_db():
     """初始化資料庫"""
-    #TODO: 初始化資料庫
-    pass
+    # 確保data目錄存在
+    DATA_DIR.mkdir(exist_ok=True)
+    # 連接資料庫並創建、初始化資料庫
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.executescript(INIT_DB)
+
 
 def save_story(version: int, theme: str, genre: str, tone: str, elements: list, 
                prompt: str, content: str, feedback: str = None, rating: int = None):
@@ -57,7 +63,7 @@ def call_openai_api(prompt: str) -> str:
     """調用OpenAI API"""
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
@@ -160,3 +166,4 @@ def create_story():
 
 if __name__ == '__main__':
     cli() 
+    
