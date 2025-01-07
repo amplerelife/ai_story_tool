@@ -6,32 +6,38 @@ BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / 'data'
 DB_PATH = DATA_DIR / 'stories.db'
 
-# 确保必要的目录存在
+# 確保必要的目錄存在
 DATA_DIR.mkdir(exist_ok=True)
 
-# 提示词模板
+# 故事生成提示詞模板
 STORY_PROMPT_TEMPLATE = """
-请根据以下要求创作一个引人入胜的故事：
+請創作一個符合以下要求的故事：
+- 主題：{theme}
+- 類型：{genre}
+- 語氣：{tone}
+- 需要包含的元素：{elements}
 
-基本要求：
-- 主题：{theme}
-- 类型：{genre}
-- 语气：{tone}
-- 关键元素：{elements}
-
-创作指南：
-1. 故事应当完全符合指定的主题和语气
-2. 根据类型调整内容的形式和长度
-3. 确保包含所有指定的关键元素
-4. 故事要有清晰的开端、发展和结尾
-5. 保持情节的连贯性和创意性
-6. 使用生动的描写和对话
-
-请直接开始创作故事，无需额外的解释或说明。
+請確保故事有完整的結構和吸引人的情節。
 """
 
-# 数据库初始化SQL
-INIT_DB_SQL = """
+# System prompt
+SYSTEM_PROMPT = "你是一個專業的故事創作者，善於創作有趣的故事。"
+
+# 資料庫初始化SQL
+# 使用者偏好
+USER_PREFERENCES_TABLE = """
+CREATE TABLE IF NOT EXISTS user_preferences (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme TEXT NOT NULL,
+    genre TEXT NOT NULL,
+    tone TEXT NOT NULL,
+    elements TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
+
+# 故事
+STORY_TABLE = """
 CREATE TABLE IF NOT EXISTS stories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     theme TEXT NOT NULL,
@@ -42,3 +48,7 @@ CREATE TABLE IF NOT EXISTS stories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 """ 
+'''
+
+
+'''
