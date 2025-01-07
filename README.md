@@ -35,7 +35,7 @@ Ai根據新的提示重新寫好故事
 4. 配置環境變量：
    創建 `.env` 文件並添加：
    ```
-   OPENAI_API_KEY=你的OpenAI API密钥
+   OPENAI_API_KEY=你的OpenAI API密碼
    ```
 
 ## 使用方法
@@ -45,13 +45,8 @@ Ai根據新的提示重新寫好故事
    python src/main.py create-story
    ```
 
-2. 查看已生成的故事：
-   ```bash
-   python src/main.py view-story [故事ID]
-   ```
-
 ## 注意事項 
 
-- 使用前請確保已配置正確的OpenAI API密钥
+- 使用前請確保已配置正確的OpenAI API密碼
 - 生成的故事會保存在本地資料庫中
 - 建議在虛擬環境中運行項目 
