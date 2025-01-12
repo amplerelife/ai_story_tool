@@ -34,7 +34,7 @@ class StoryEvaluator:
         self.cursor.execute(
             "SELECT feedback, rating FROM story_records WHERE version = ?",
             (version,)
-        )
+
         return self.cursor.fetchone()
         
     def tokenize_chinese(self, text):
